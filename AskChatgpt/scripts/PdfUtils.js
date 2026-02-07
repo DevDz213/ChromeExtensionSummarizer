@@ -1,11 +1,11 @@
-export function generateCoverLetter(bodyText) {
+export function generateCoverLetter(bodyText, jobTitle) {
     const { jsPDF } = window.jspdf || window.jsPDF || {};
     if (!jsPDF) {
         console.log('jsPDF not found - ensure jspdf.umd.min.js is loaded before PdfUtils.js');
         return;
     }
     // Paramètre dynamique pour le titre
-    const poste = "Développeur Full Stack";
+    const poste = jobTitle;
 
     // Création du document
     const doc = new jsPDF();

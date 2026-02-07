@@ -60,10 +60,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 type: "PROMPT_CHATGPT",
                 prompt: prompt
             });
+
+            await new Promise((resolve) => setTimeout(resolve, 5000));
+
+            //collect Answer
+            const response = await chrome.tabs.sendMessage(chatGptTab.id, {
+                type: "GET_ANSWER",
+            });
+
+            console.log("Generating PDF with content", response.text);
+            generateCoverLetter(response.text, title);
+
+            console.log("Cover letter generated.");
         }
         else {
             console.log("ChatGPT tab not found.");
         }
+
+        //await chrome.tabs.remove(newTabId);
 
     });
 });
