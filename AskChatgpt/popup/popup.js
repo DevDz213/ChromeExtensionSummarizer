@@ -3,6 +3,27 @@ import { generateCoverLetter } from "../scripts/PdfUtils.js";
 console.log("Popup script loaded");
 
 
+chrome.runtime.sendMessage({ 
+    type: "SAVE_CV_PATH", 
+    filePath: chrome.runtime.getURL("FCV_Arezki_Oussad.pdf")
+}, (response) => {
+    if (response && response.success) {
+        console.log("CV path saved successfully in background.");
+    } else {
+        console.log("Failed to save CV path in background.");
+    }
+});
+
+
+function countWords(text) {
+    return text
+        .trim()                           // Retire espaces début/fin
+        .split(/\s+/)                     // Sépare sur espaces
+        .filter(word => word.length > 0)  // Retire vides
+        .length;
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const askButton = document.getElementById("askButton");
 
@@ -20,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("No more jobs available.");
             return;
         }
-        console.log("Next job link received in popup:", nextJobLink.link);
 
         // OUVRIR LE PROCHAIN JOB DANS UN NOUVEL ONGLET ET GET LES DETAILS
         const newTab = await chrome.tabs.create({ url: nextJobLink.link, active: false });
@@ -43,70 +63,60 @@ document.addEventListener("DOMContentLoaded", () => {
             await chrome.tabs.remove(newTabId);
             return;
         }
-        else if(jobData.type === "JOB_DETAILS") {
-            console.log("Job details received in popup:", jobData);
-        }
+        console.log("Job details received in popup:", jobData);
+        
 
         // ALLER SUR ONGLET CHAT DÉJÀ OUVERT ET LUI BALANCER LE PROMPT
-        const {title, description, requirements} = jobData;
-        const prompt = `Rédige moi une lettre de motivation pour le poste suivant en te basant sur mon CV. Poste : ${title}. Description du poste : ${description}. Exigences du poste : ${requirements}. CV : [insérer le contenu du CV ici]. Lettre de motivation : Madame, Monsieur, [insérer le reste de la lettre ici] Arezki Oussad. Fais la très courte (environ 100 mots)`;
-
+        const {employer, title, description, requirements} = jobData;
+        const prompt = `Rédige moi une lettre de motivation pour le poste suivant en te basant sur mon CV. Employeur: ${employer} Poste : ${title}. Description du poste : ${description}. Exigences du poste : ${requirements}. CV : [insérer le contenu du CV ici]. Lettre de motivation : Madame, Monsieur, [insérer le reste de la lettre ici] Arezki Oussad. Fais la très courte (environ 200 mots)`;
+        
+        console.log("Asking chat to generate cover letter")
         const [chatGptTab] = await chrome.tabs.query({ 
             url: "https://chatgpt.com/*"
         });
 
-        if (chatGptTab) {
-            await chrome.tabs.sendMessage(chatGptTab.id, {
-                type: "PROMPT_CHATGPT",
-                prompt: prompt
-            });
-
-            await new Promise((resolve) => setTimeout(resolve, 5000));
-
-            //collect Answer
-            const response = await chrome.tabs.sendMessage(chatGptTab.id, {
-                type: "GET_ANSWER",
-            });
-
-            console.log("Generating PDF with content", response.text);
-            generateCoverLetter(response.text, title);
-
-            console.log("Cover letter generated.");
-        }
-        else {
+        if(!chatGptTab) {
             console.log("ChatGPT tab not found.");
+            return;
         }
 
+        await chrome.tabs.sendMessage(chatGptTab.id, {
+            type: "PROMPT_CHATGPT",
+            prompt: prompt
+        });
+
+        console.log("Prompt sent to ChatGPT, waiting for response...");
+
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+
+        //collect Answer from chatgpt
+        const response = await chrome.tabs.sendMessage(chatGptTab.id, {
+            type: "GET_ANSWER",
+        });
+
+        const wordCount = countWords(response.text);
+
+        // Generate PDF with the response
+        console.log("Generating PDF this number of words :", wordCount);
+        if(wordCount < 50){
+            console.log("Generated cover letter is too short, something wrong occured.");
+            await chrome.tabs.remove(newTabId);
+            return;
+        }
+
+        generateCoverLetter(response.text, title);
+
+        console.log("Cover letter generated.");
+        
+        console.log("Applying to job...")
+
+        //Postuler pour le job
+        chrome.tabs.sendMessage(newTabId, {
+            type: "APPLY_TO_JOB",
+        });
+        
+        console.log("Application done!")
         //await chrome.tabs.remove(newTabId);
 
     });
 });
-
-
-
-
-
-// document.addEventListener("DOMContentLoaded", () => {
-//     const askButton = document.getElementById("askButton");
-
-//     askButton.addEventListener("click", async () => {
-//         console.log("Ask Button clicked");
-//         //Pompt chatgpt with cv file and job description
-//         const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        
-//         await chrome.tabs.sendMessage(activeTab.id, {
-//             type: "PROMPT_CHATGPT",
-//             prompt: "Rédige moi une lettre de motivation pour le poste suivant en te basant sur mon CV. Poste : Développeur Full Stack. CV : [insérer le contenu du CV ici]. Lettre de motivation : Madame, Monsieur, [insérer le reste de la lettre ici] Arezki Oussad. Fais la très courte (environ 100 mots)"
-//         });   
-        
-//         await new Promise((resolve) => setTimeout(resolve, 5000));
-
-//         //collect Answer
-//         const response = await chrome.tabs.sendMessage(activeTab.id, {
-//             type: "GET_ANSWER",
-//         });
-
-//         console.log("Generating PDF");
-//         generateCoverLetter(response.text);
-//     });   
-// });

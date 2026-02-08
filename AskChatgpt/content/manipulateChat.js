@@ -64,8 +64,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
     if (msg.type === "GET_ANSWER") {
         (async () => {
-            console.log("Message GET_ANSWER reçu dans content.js");
-            const result = cutText(await getLastAnswer(), "Madame, Monsieur,", "Arezki Oussad");
+            console.log("Message GET_ANSWER reçu");
+            const rawAnswer = await getLastAnswer();
+            console.log("Raw Answer :", rawAnswer);
+            const result = cutText(rawAnswer, "Madame, Monsieur,", "Arezki Oussad");
+            console.log("Answer extracted:", result);
             sendResponse({ text : result });
         })();
         return true; // important pour garder le canal ouvert en async

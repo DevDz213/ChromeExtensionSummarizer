@@ -30,14 +30,14 @@ export function generateCoverLetter(bodyText, jobTitle) {
     doc.text("Madame, Monsieur,", marginX, currentY);
 
     // Calcul automatique de l'espace après la ligne
-    currentY += doc.getFontSize() * doc.getLineHeightFactor() + 4;
+    currentY += 8;
 
     // Texte principal
-    const lines = doc.splitTextToSize(bodyText, 170);
+    const lines = doc.splitTextToSize(bodyText.trim(), 170);
     doc.text(lines, marginX, currentY);
 
     // Mise à jour de Y après le paragraphe
-    currentY += lines.length * doc.getFontSize() * doc.getLineHeightFactor() + 10;
+    currentY += lines.length * 5 + 3;
 
     // ===== SIGNATURE =====
     doc.text("Cordialement,", marginX, currentY);
