@@ -33,6 +33,8 @@ relevé, avant de cliquer sur postuler, fermer la page et passer au poste suivan
 5. Sélectionnez le dossier de l'extension contenant le fichier manifest.json à la racine 
 6. L'extension apparaîtra dans votre barre d'outils (N'oubliez pas de l'épingler)
 
+![Chrome Extension](Img/5.png)
+
 ### Méthode 2 : Depuis un fichier .zip
 
 1. Téléchargez le fichier `.zip` de l'extension
@@ -45,25 +47,22 @@ relevé, avant de cliquer sur postuler, fermer la page et passer au poste suivan
 
 ### Première utilisation
 
-1. Cliquez sur l'icône de l'extension dans la barre d'outils
-2. [Étapes de configuration spécifiques]
+Aucun setup n'est spécifique, vérifiez seulement que votre extension figure à droite de la barre de recherche du navigateur,
+sinon clickez sur l'icone de puzzle et épinglez l'extension.
 
 ### Organiser vos onglets
 
-**Option 1 : [Nom de la fonctionnalité]**
-- Étape 1
-- Étape 2
+**Site des offres de stages de polytechnique**
+- Ajustez les filtres proposés par le site afin d'afficher que les postes qui vous intéresse
+- N'oubliez pas de cocher tous les filtres de consultation, sauf les stages auquels vous avez déjà postulé*
+*Fiez vous à l'image qui suit
 
-**Option 2 : [Nom de la fonctionnalité]**
-- Étape 1
-- Étape 2
 
-### Raccourcis clavier (optionnel)
+**Préparer l'onglet ChatGpt**
+- Ouvrez une nouvelle fenêtre (⚠️pas onglet!) et accédez à une conversation sur votre compte
+- Préparez le contexte pour que chat puisse recevoir des offres et formuler une lettre de motivation
 
-- `Ctrl + Shift + Y` : [Action]
-- `Ctrl + Shift + X` : [Action]
-
-Pour modifier les raccourcis : `edge://extensions/shortcuts`
+![Fenetres Depart](Img/1.png)
 
 ## 🐛 Bugs courants et solutions
 
