@@ -30,14 +30,16 @@ async function waitForAnswerLoad(answerEl)  {
     let loading = true;
 
     while(loading) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1500));
         const newLastWord = answerEl.innerText.split(" ").pop();
-        if (newLastWord === lastWord ) {
+        const btn = document.querySelector('button[aria-label="Start Voice"]');
+        if (newLastWord === lastWord && btn) {
             console.log("Answer has finished loading.");
             loading = false;
         }
         lastWord = newLastWord;
     }
+    await new Promise((resolve) => setTimeout(resolve, 500));
 }
 
 async function getLastAnswer() {
@@ -58,12 +60,12 @@ async function getLastAnswer() {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "PROMPT_CHATGPT") {
-        console.log("Message PROMPT_CHATGPT reçu dans content.js");
-        promptChatgpt(msg.prompt);
-    }
-
-    if (msg.type === "GET_ANSWER") {
         (async () => {
+            console.log("Message PROMPT_CHATGPT reçu dans content.js");
+            promptChatgpt(msg.prompt);
+
+            await new Promise((resolve) => setTimeout(resolve, 5000));
+
             console.log("Message GET_ANSWER reçu");
             const rawAnswer = await getLastAnswer();
             console.log("Raw Answer :", rawAnswer);

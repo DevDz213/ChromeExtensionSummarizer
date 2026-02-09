@@ -16,7 +16,7 @@ export function generateCoverLetter(bodyText, jobTitle) {
 
     // ===== TITRE =====
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.text(`Candidature : ${poste}`, marginX, currentY);
 
     // Espace après le titre
