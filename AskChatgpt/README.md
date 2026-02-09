@@ -47,9 +47,11 @@ relevé, avant de cliquer sur postuler, fermer la page et passer au poste suivan
 ## Subtilité dans le code
 
 ### Ajout du CV personnel dans le répertoire
-Ajoutez votre CV à la racine de l'extension, au même niveau que le manifest.json. Il faut aussi modifier une ligne de code dans le fichier popup/popup.js afin de sauvegarder le bon pdf dans votre navigateur.
-![image](Img/2.png)
+Ajoutez votre CV à la racine de l'extension, au même niveau que le **manifest.json**. Il faut aussi modifier une ligne de code dans le fichier popup/popup.js afin de sauvegarder le bon pdf dans votre navigateur.
+![code1](Img/2.png)
 
+### Formatage de la lettre de motivation générée
+J'ai laissé mon nom pour tronquer la réponse de chatgpt, ainsi que pour le formattage de la lettre de motivation. Il faut donc modifier ces lignes dans les fichiers **Script.PdfUtils.js** et **content/manipulateChat.js**
 
 ## ⚙️ Configuration des onglets
 
