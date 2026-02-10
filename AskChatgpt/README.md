@@ -134,11 +134,11 @@ L'extension comporte encore plusieurs bugs, mais, rassurez vous, cela arrête le
 
 ## 🤝 Contribution
 
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+Merci à Anas Khettal pour tout!
 
 ## 📄 Licence
 
-Leak pas kho wallah c'est pas nice
+Duaa de l'opprimé si tu leak
 
 ---
 
